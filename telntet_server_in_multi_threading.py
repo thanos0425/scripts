@@ -3,6 +3,11 @@ import subprocess
 import sys
 
 
+def write_res(filename, msg):
+    with open(filename, mode='a', encoding='utf-8') as f:
+        f.write(msg)
+
+
 def telnet_server(ip, port):
     cmd = f"nc -z -w 2 {ip} {port}"
     result = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True, encoding='utf-8',
@@ -10,9 +15,13 @@ def telnet_server(ip, port):
     return_code = result.returncode
     print(type(return_code))
     if return_code == 0:
-        print(f'{ip} {port} accessable')
+        ok_msg = f'{ip} {port} accessable'
+        print(ok_msg)
+        write_res('ok.res', ok_msg)
     else:
-        print(f'{ip} {port} not accessable')
+        err_msg = f'{ip} {port} not accessable'
+        print(err_msg)
+        write_res('err.res', err_msg)
 
 
 ip_input = sys.argv[1]
